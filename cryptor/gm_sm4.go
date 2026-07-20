@@ -1,21 +1,9 @@
 package cryptor
 
-import (
-	"crypto/cipher"
-	"crypto/rand"
-	"encoding/binary"
-	"io"
-)
-
-// SM4 implements the Chinese SM4 block cipher.
-// SM4 is a 128-bit block cipher with 128-bit keys.
-// This implementation uses pre-computed lookup tables for optimal performance.
-
 const sm4BlockSize = 16
 
-// Pre-computed T-transformation lookup tables for performance optimization
-var sm4T1Table [256][4]uint32 // S-box + L1 transformation
-var sm4T2Table [256][4]uint32 // S-box + L2 transformation
+var sm4T1Table [256][4]uint32
+var sm4T2Table [256][4]uint32
 
 var sm4Sbox = [256]byte{
 	0xd6, 0x90, 0xe9, 0xfe, 0xcc, 0xe1, 0x3d, 0xb7, 0x16, 0xb6, 0x14, 0xc2, 0x28, 0xfb, 0x2c, 0x05,
@@ -49,22 +37,18 @@ var sm4CK = [32]uint32{
 	0x10171e25, 0x2c333a41, 0x484f565d, 0x646b7279,
 }
 
-// 初始化预计算查找表
 func init() {
-	// Pre-compute all possible T1 and T2 transformations
+
 	for pos := 0; pos < 4; pos++ {
 		for i := 0; i < 256; i++ {
-			// S-box 替换
+
 			sboxVal := sm4Sbox[i]
-			
-			// 根据字节位置计算偏移
+
 			shift := uint32((3 - pos) * 8)
 			b := uint32(sboxVal) << shift
-			
-			// L1 变换：b ^ ROL(b,2) ^ ROL(b,10) ^ ROL(b,18) ^ ROL(b,24)
+
 			sm4T1Table[i][pos] = b ^ sm4RotateLeft(b, 2) ^ sm4RotateLeft(b, 10) ^ sm4RotateLeft(b, 18) ^ sm4RotateLeft(b, 24)
-			
-			// L2 变换：b ^ ROL(b,13) ^ ROL(b,23)
+
 			sm4T2Table[i][pos] = b ^ sm4RotateLeft(b, 13) ^ sm4RotateLeft(b, 23)
 		}
 	}
@@ -75,196 +59,24 @@ type sm4Cipher struct {
 	dec [32]uint32
 }
 
-// Sm4EcbEncrypt encrypts data using SM4 in ECB mode.
-// key must be 16 bytes.
-// Play: https://go.dev/play/p/l5IQxYuuaED
-func Sm4EcbEncrypt(data, key []byte) []byte {
-	if len(key) != 16 {
-		panic("sm4: key length must be 16 bytes")
-	}
+func Sm4EcbEncrypt(data, key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-	c := newSm4Cipher(key)
-	padded := pkcs7Padding(data, sm4BlockSize)
-	encrypted := make([]byte, len(padded))
+func Sm4EcbDecrypt(encrypted, key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-	for i := 0; i < len(padded); i += sm4BlockSize {
-		c.Encrypt(encrypted[i:i+sm4BlockSize], padded[i:i+sm4BlockSize])
-	}
+func Sm4CbcEncrypt(data, key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-	return encrypted
-}
+func Sm4CbcDecrypt(encrypted, key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-// Sm4EcbDecrypt decrypts data using SM4 in ECB mode.
-// key must be 16 bytes.
-// Play: https://go.dev/play/p/l5IQxYuuaED
-func Sm4EcbDecrypt(encrypted, key []byte) []byte {
-	if len(key) != 16 {
-		panic("sm4: key length must be 16 bytes")
-	}
+func newSm4Cipher(key []byte) *sm4Cipher { _ = "STUB: not implemented"; return nil }
 
-	if len(encrypted)%sm4BlockSize != 0 {
-		panic("sm4: encrypted data length must be multiple of block size")
-	}
+func (c *sm4Cipher) BlockSize() int { _ = "STUB: not implemented"; return 0 }
 
-	c := newSm4Cipher(key)
-	decrypted := make([]byte, len(encrypted))
+func (c *sm4Cipher) Encrypt(dst, src []byte) { _ = "STUB: not implemented"; return }
 
-	for i := 0; i < len(encrypted); i += sm4BlockSize {
-		c.Decrypt(decrypted[i:i+sm4BlockSize], encrypted[i:i+sm4BlockSize])
-	}
+func (c *sm4Cipher) Decrypt(dst, src []byte) { _ = "STUB: not implemented"; return }
 
-	return pkcs7UnPadding(decrypted)
-}
+func sm4T1Fast(a uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
-// Sm4CbcEncrypt encrypts data using SM4 in CBC mode.
-// key must be 16 bytes.
-// Play: https://go.dev/play/p/65Q6iYhLRTa
-func Sm4CbcEncrypt(data, key []byte) []byte {
-	if len(key) != 16 {
-		panic("sm4: key length must be 16 bytes")
-	}
+func sm4T2Fast(a uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
-	c := newSm4Cipher(key)
-	padded := pkcs7Padding(data, sm4BlockSize)
-
-	iv := make([]byte, sm4BlockSize)
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		panic("sm4: failed to generate IV: " + err.Error())
-	}
-
-	encrypted := make([]byte, len(padded))
-	mode := cipher.NewCBCEncrypter(c, iv)
-	mode.CryptBlocks(encrypted, padded)
-
-	return append(iv, encrypted...)
-}
-
-// Sm4CbcDecrypt decrypts data using SM4 in CBC mode.
-// key must be 16 bytes.
-// Play: https://go.dev/play/p/65Q6iYhLRTa
-func Sm4CbcDecrypt(encrypted, key []byte) []byte {
-	if len(key) != 16 {
-		panic("sm4: key length must be 16 bytes")
-	}
-
-	if len(encrypted) < sm4BlockSize {
-		panic("sm4: encrypted data too short")
-	}
-
-	if len(encrypted)%sm4BlockSize != 0 {
-		panic("sm4: encrypted data length must be multiple of block size")
-	}
-
-	c := newSm4Cipher(key)
-	iv := encrypted[:sm4BlockSize]
-	ciphertext := encrypted[sm4BlockSize:]
-
-	decrypted := make([]byte, len(ciphertext))
-	mode := cipher.NewCBCDecrypter(c, iv)
-	mode.CryptBlocks(decrypted, ciphertext)
-
-	return pkcs7UnPadding(decrypted)
-}
-
-func newSm4Cipher(key []byte) *sm4Cipher {
-	c := &sm4Cipher{}
-
-	var mk [4]uint32
-	for i := 0; i < 4; i++ {
-		mk[i] = binary.BigEndian.Uint32(key[i*4 : (i+1)*4])
-	}
-
-	var k [36]uint32
-	k[0] = mk[0] ^ sm4FK[0]
-	k[1] = mk[1] ^ sm4FK[1]
-	k[2] = mk[2] ^ sm4FK[2]
-	k[3] = mk[3] ^ sm4FK[3]
-
-	for i := 0; i < 32; i++ {
-		k[i+4] = k[i] ^ sm4T2Fast(k[i+1]^k[i+2]^k[i+3]^sm4CK[i])
-		c.enc[i] = k[i+4]
-	}
-
-	for i := 0; i < 32; i++ {
-		c.dec[i] = c.enc[31-i]
-	}
-
-	return c
-}
-
-func (c *sm4Cipher) BlockSize() int {
-	return sm4BlockSize
-}
-
-func (c *sm4Cipher) Encrypt(dst, src []byte) {
-	if len(src) < sm4BlockSize {
-		panic("sm4: input not full block")
-	}
-	if len(dst) < sm4BlockSize {
-		panic("sm4: output not full block")
-	}
-
-	// 使用局部变量避免数组分配，提升性能
-	x0 := binary.BigEndian.Uint32(src[0:4])
-	x1 := binary.BigEndian.Uint32(src[4:8])
-	x2 := binary.BigEndian.Uint32(src[8:12])
-	x3 := binary.BigEndian.Uint32(src[12:16])
-
-	// 32 轮加密
-	for i := 0; i < 32; i++ {
-		t := x1 ^ x2 ^ x3 ^ c.enc[i]
-		x0 ^= sm4T1Fast(t)
-		x0, x1, x2, x3 = x1, x2, x3, x0
-	}
-
-	binary.BigEndian.PutUint32(dst[0:4], x3)
-	binary.BigEndian.PutUint32(dst[4:8], x2)
-	binary.BigEndian.PutUint32(dst[8:12], x1)
-	binary.BigEndian.PutUint32(dst[12:16], x0)
-}
-
-func (c *sm4Cipher) Decrypt(dst, src []byte) {
-	if len(src) < sm4BlockSize {
-		panic("sm4: input not full block")
-	}
-	if len(dst) < sm4BlockSize {
-		panic("sm4: output not full block")
-	}
-
-	x0 := binary.BigEndian.Uint32(src[0:4])
-	x1 := binary.BigEndian.Uint32(src[4:8])
-	x2 := binary.BigEndian.Uint32(src[8:12])
-	x3 := binary.BigEndian.Uint32(src[12:16])
-
-	// 32 轮解密
-	for i := 0; i < 32; i++ {
-		t := x1 ^ x2 ^ x3 ^ c.dec[i]
-		x0 ^= sm4T1Fast(t)
-		x0, x1, x2, x3 = x1, x2, x3, x0
-	}
-
-	binary.BigEndian.PutUint32(dst[0:4], x3)
-	binary.BigEndian.PutUint32(dst[4:8], x2)
-	binary.BigEndian.PutUint32(dst[8:12], x1)
-	binary.BigEndian.PutUint32(dst[12:16], x0)
-}
-
-// 使用预计算查找表的快速 T1 变换（用于加密轮函数）
-func sm4T1Fast(a uint32) uint32 {
-	return sm4T1Table[byte(a>>24)][0] ^
-		sm4T1Table[byte(a>>16)][1] ^
-		sm4T1Table[byte(a>>8)][2] ^
-		sm4T1Table[byte(a)][3]
-}
-
-// 使用预计算查找表的快速 T2 变换（用于密钥扩展）
-func sm4T2Fast(a uint32) uint32 {
-	return sm4T2Table[byte(a>>24)][0] ^
-		sm4T2Table[byte(a>>16)][1] ^
-		sm4T2Table[byte(a>>8)][2] ^
-		sm4T2Table[byte(a)][3]
-}
-
-func sm4RotateLeft(x uint32, n uint32) uint32 {
-	return (x << n) | (x >> (32 - n))
-}
+func sm4RotateLeft(x uint32, n uint32) uint32 { _ = "STUB: not implemented"; return 0 }

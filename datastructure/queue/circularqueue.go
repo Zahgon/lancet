@@ -1,18 +1,5 @@
-// Copyright 2021 dudaodong@gmail.com. All rights reserved.
-// Use of this source code is governed by MIT license
-
-// Package datastructure contains some data structure.
-// Queue structure contains ArrayQueue, LinkedQueue, CircularQueue, and PriorityQueue.
 package datastructure
 
-import (
-	"errors"
-	"fmt"
-	"reflect"
-)
-
-// CircularQueue implements circular queue with slice,
-// last index of CircularQueue don't contain value, so acturl capacity is capacity - 1
 type CircularQueue[T any] struct {
 	data     []T
 	front    int
@@ -20,104 +7,26 @@ type CircularQueue[T any] struct {
 	capacity int
 }
 
-// NewCircularQueue return a empty CircularQueue pointer
-func NewCircularQueue[T any](capacity int) *CircularQueue[T] {
-	data := make([]T, capacity)
-	return &CircularQueue[T]{data: data, front: 0, rear: 0, capacity: capacity}
-}
+func NewCircularQueue[T any](capacity int) *CircularQueue[T] { _ = "STUB: not implemented"; return nil }
 
-// Data return slice of queue data
-func (q *CircularQueue[T]) Data() []T {
-	data := []T{}
+func (q *CircularQueue[T]) Data() []T { _ = "STUB: not implemented"; return nil }
 
-	front := q.front
-	rear := q.rear
-	if front <= rear {
-		return q.data[front:rear]
-	}
+func (q *CircularQueue[T]) Size() int { _ = "STUB: not implemented"; return 0 }
 
-	data = append(data, q.data[front:]...)
-	data = append(data, q.data[0:rear]...)
+func (q *CircularQueue[T]) IsEmpty() bool { _ = "STUB: not implemented"; return false }
 
-	return data
-}
+func (q *CircularQueue[T]) IsFull() bool { _ = "STUB: not implemented"; return false }
 
-// Size return number of elements in circular queue
-func (q *CircularQueue[T]) Size() int {
-	if q.capacity == 0 {
-		return 0
-	}
-	return (q.rear - q.front + q.capacity) % q.capacity
-}
+func (q *CircularQueue[T]) Front() T { _ = "STUB: not implemented"; return *new(T) }
 
-// IsEmpty checks if queue is empty or not
-func (q *CircularQueue[T]) IsEmpty() bool {
-	return q.front == q.rear
-}
+func (q *CircularQueue[T]) Back() T { _ = "STUB: not implemented"; return *new(T) }
 
-// IsFull checks if queue is full or not
-func (q *CircularQueue[T]) IsFull() bool {
-	return (q.rear+1)%q.capacity == q.front
-}
+func (q *CircularQueue[T]) Enqueue(value T) error { _ = "STUB: not implemented"; return nil }
 
-// Front return front value of queue
-func (q *CircularQueue[T]) Front() T {
-	return q.data[q.front]
-}
+func (q *CircularQueue[T]) Dequeue() (*T, error) { _ = "STUB: not implemented"; return nil, nil }
 
-// Back return back value of queue
-func (q *CircularQueue[T]) Back() T {
-	if q.rear-1 >= 0 {
-		return q.data[q.rear-1]
-	}
-	return q.data[q.capacity-1]
-}
+func (q *CircularQueue[T]) Clear() { _ = "STUB: not implemented"; return }
 
-// Enqueue put element into queue
-func (q *CircularQueue[T]) Enqueue(value T) error {
-	if q.IsFull() {
-		return errors.New("queue is full!")
-	}
+func (q *CircularQueue[T]) Contain(value T) bool { _ = "STUB: not implemented"; return false }
 
-	q.data[q.rear] = value
-	q.rear = (q.rear + 1) % q.capacity
-
-	return nil
-}
-
-// Dequeue remove head element of queue and return it, if queue is empty, return nil and error
-func (q *CircularQueue[T]) Dequeue() (*T, error) {
-	if q.IsEmpty() {
-		return nil, errors.New("queue is empty")
-	}
-
-	headItem := q.data[q.front]
-	var t T
-	q.data[q.front] = t
-	q.front = (q.front + 1) % q.capacity
-
-	return &headItem, nil
-}
-
-// Clear the queue data
-func (q *CircularQueue[T]) Clear() {
-	q.data = []T{}
-	q.front = 0
-	q.rear = 0
-	q.capacity = 0
-}
-
-// Contain checks if the value is in queue or not
-func (q *CircularQueue[T]) Contain(value T) bool {
-	for _, v := range q.data {
-		if reflect.DeepEqual(v, value) {
-			return true
-		}
-	}
-	return false
-}
-
-// Print queue data
-func (q *CircularQueue[T]) Print() {
-	fmt.Printf("%+v\n", q)
-}
+func (q *CircularQueue[T]) Print() { _ = "STUB: not implemented"; return }

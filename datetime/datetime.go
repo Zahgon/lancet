@@ -1,37 +1,6 @@
-// Copyright 2021 dudaodong@gmail.com. All rights reserved.
-// Use of this source code is governed by MIT license.
-
-// Package datetime implements some functions to format date and time.
-// Note:
-// 1. `format` param in FormatTimeToStr function should be as flow (case no sensitive):
-// "yyyy-mm-dd hh:mm:ss"
-// "yyyy-mm-dd hh:mm"
-// "yyyy-mm-dd hh"
-// "yyyy-mm-dd"
-// "yyyy-mm"
-// "mm-dd"
-// "dd-mm-yy hh:mm:ss"
-// "yyyy/mm/dd hh:mm:ss"
-// "yyyy/mm/dd hh:mm"
-// "yyyy/mm/dd hh"
-// "yyyy/mm/dd"
-// "yyyy/mm"
-// "mm/dd"
-// "dd/mm/yy hh:mm:ss"
-// "yyyymmdd"
-// "mmddyy"
-// "yyyy"
-// "yy"
-// "mm"
-// "hh:mm:ss"
-// "hh:mm"
-// "mm:ss"
 package datetime
 
 import (
-	"fmt"
-	"runtime"
-	"strings"
 	"time"
 )
 
@@ -64,488 +33,130 @@ func init() {
 	}
 }
 
-// AddMinute add or sub minutes to the time.
-// Play: https://go.dev/play/p/nT1heB1KUUK
 func AddMinute(t time.Time, minutes int64) time.Time {
-	return t.Add(time.Minute * time.Duration(minutes))
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// AddHour add or sub hours to the time.
-// Play: https://go.dev/play/p/rcMjd7OCsi5
-func AddHour(t time.Time, hours int64) time.Time {
-	return t.Add(time.Hour * time.Duration(hours))
-}
+func AddHour(t time.Time, hours int64) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// AddDay add or sub days to the time.
-// Play: https://go.dev/play/p/dIGbs_uTdFa
-func AddDay(t time.Time, days int64) time.Time {
-	return t.Add(24 * time.Hour * time.Duration(days))
-}
+func AddDay(t time.Time, days int64) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// AddWeek add or sub weeks to the time.
-// play: https://go.dev/play/p/M9TqdMiaA2p
-func AddWeek(t time.Time, weeks int64) time.Time {
-	return t.Add(7 * 24 * time.Hour * time.Duration(weeks))
-}
+func AddWeek(t time.Time, weeks int64) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// AddMonth add or sub months to the time.
-// Play: https://go.dev/play/p/DLoiOnpLvsN
 func AddMonth(t time.Time, months int64) time.Time {
-	return t.AddDate(0, int(months), 0)
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// AddYear add or sub year to the time.
-// Play: https://go.dev/play/p/MqW2ujnBx10
-func AddYear(t time.Time, year int64) time.Time {
-	return t.AddDate(int(year), 0, 0)
-}
+func AddYear(t time.Time, year int64) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// AddDaySafe add or sub days to the time and ensure that the returned date does not exceed the valid date of the target year and month.
-// Play: https://go.dev/play/p/JTohZFpoDJ3
-func AddDaySafe(t time.Time, days int) time.Time {
-	t = t.AddDate(0, 0, days)
-	year, month, day := t.Date()
+func AddDaySafe(t time.Time, days int) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-	lastDayOfMonth := time.Date(year, month+1, 0, 0, 0, 0, 0, t.Location()).Day()
-
-	if day > lastDayOfMonth {
-		t = time.Date(year, month, lastDayOfMonth, t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), t.Location())
-	}
-
-	return t
-}
-
-// AddMonthSafe add or sub months to the time and ensure that the returned date does not exceed the valid date of the target year and month.
-// Play: https://go.dev/play/p/KLw0lo6mbVW
 func AddMonthSafe(t time.Time, months int) time.Time {
-	year := t.Year()
-	month := int(t.Month()) + months
-
-	for month > 12 {
-		month -= 12
-		year++
-	}
-	for month < 1 {
-		month += 12
-		year--
-	}
-
-	daysInMonth := time.Date(year, time.Month(month+1), 0, 0, 0, 0, 0, time.UTC).Day()
-
-	day := t.Day()
-	if day > daysInMonth {
-		day = daysInMonth
-	}
-
-	return time.Date(year, time.Month(month), day, t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), t.Location())
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// AddYearSafe add or sub years to the time and ensure that the returned date does not exceed the valid date of the target year and month.
-// Play: https://go.dev/play/p/KVGXWZZ54ZH
 func AddYearSafe(t time.Time, years int) time.Time {
-	year, month, day := t.Date()
-	year += years
-
-	if month == time.February && day == 29 {
-		if !IsLeapYear(year) {
-			day = 28
-		}
-	}
-
-	return time.Date(year, month, day, t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), t.Location())
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// GetNowDate return format yyyy-mm-dd of current date.
-// Play: https://go.dev/play/p/PvfkPpcpBBf
-func GetNowDate() string {
-	return time.Now().Format("2006-01-02")
-}
+func GetNowDate() string { _ = "STUB: not implemented"; return "" }
 
-// GetNowTime return format hh-mm-ss of current time.
-// Play: https://go.dev/play/p/l7BNxCkTmJS
-func GetNowTime() string {
-	return time.Now().Format("15:04:05")
-}
+func GetNowTime() string { _ = "STUB: not implemented"; return "" }
 
-// GetNowDateTime return format yyyy-mm-dd hh-mm-ss of current datetime.
-// Play: https://go.dev/play/p/pI4AqngD0al
-func GetNowDateTime() string {
-	return time.Now().Format("2006-01-02 15:04:05")
-}
+func GetNowDateTime() string { _ = "STUB: not implemented"; return "" }
 
-// GetTodayStartTime return the start time of today, format: yyyy-mm-dd 00:00:00.
-// Play: https://go.dev/play/p/84siyYF7t99
-func GetTodayStartTime() string {
-	return time.Now().Format("2006-01-02") + " 00:00:00"
-}
+func GetTodayStartTime() string { _ = "STUB: not implemented"; return "" }
 
-// GetTodayEndTime return the end time of today, format: yyyy-mm-dd 23:59:59.
-// Play: https://go.dev/play/p/jjrLnfoqgn3
-func GetTodayEndTime() string {
-	return time.Now().Format("2006-01-02") + " 23:59:59"
-}
+func GetTodayEndTime() string { _ = "STUB: not implemented"; return "" }
 
-// GetZeroHourTimestamp return timestamp of zero hour (timestamp of 00:00).
-// Play: https://go.dev/play/p/QmL2oIaGE3q
-func GetZeroHourTimestamp() int64 {
-	ts := time.Now().Format("2006-01-02")
-	t, _ := time.Parse("2006-01-02", ts)
-	return t.UTC().Unix() - 8*3600
-}
+func GetZeroHourTimestamp() int64 { _ = "STUB: not implemented"; return 0 }
 
-// GetNightTimestamp return timestamp of zero hour (timestamp of 23:59).
-// Play: https://go.dev/play/p/UolysR3MYP1
-func GetNightTimestamp() int64 {
-	return GetZeroHourTimestamp() + 86400 - 1
-}
+func GetNightTimestamp() int64 { _ = "STUB: not implemented"; return 0 }
 
-// FormatTimeToStr convert time to string.
-// Play: https://go.dev/play/p/_Ia7M8H_OvE
 func FormatTimeToStr(t time.Time, format string, timezone ...string) string {
-	tf, ok := timeFormat[strings.ToLower(format)]
-	if !ok {
-		return ""
-	}
-
-	if timezone != nil && timezone[0] != "" {
-		loc, err := time.LoadLocation(timezone[0])
-		if err != nil {
-			return ""
-		}
-		return t.In(loc).Format(tf)
-	}
-	return t.Format(tf)
+	_ = "STUB: not implemented"
+	return ""
 }
 
-// FormatStrToTime convert string to time.
-// Play: https://go.dev/play/p/1h9FwdU8ql4
 func FormatStrToTime(str, format string, timezone ...string) (time.Time, error) {
-	tf, ok := timeFormat[strings.ToLower(format)]
-	if !ok {
-		return time.Time{}, fmt.Errorf("format %s not support", format)
-	}
-
-	if timezone != nil && timezone[0] != "" {
-		loc, err := time.LoadLocation(timezone[0])
-		if err != nil {
-			return time.Time{}, err
-		}
-
-		return time.ParseInLocation(tf, str, loc)
-	}
-
-	return time.Parse(tf, str)
+	_ = "STUB: not implemented"
+	return *new(time.Time), nil
 }
 
-// BeginOfMinute return beginning minute time of day.
-// Play: https://go.dev/play/p/ieOLVJ9CiFT
-func BeginOfMinute(t time.Time) time.Time {
-	y, m, d := t.Date()
-	return time.Date(y, m, d, t.Hour(), t.Minute(), 0, 0, t.Location())
-}
+func BeginOfMinute(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// EndOfMinute return end minute time of day.
-// Play: https://go.dev/play/p/yrL5wGzPj4z
-func EndOfMinute(t time.Time) time.Time {
-	y, m, d := t.Date()
-	return time.Date(y, m, d, t.Hour(), t.Minute(), 59, int(time.Second-time.Nanosecond), t.Location())
-}
+func EndOfMinute(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// BeginOfHour return beginning hour time of day.
-// Play: https://go.dev/play/p/GhdGFnDWpYs
-func BeginOfHour(t time.Time) time.Time {
-	y, m, d := t.Date()
-	return time.Date(y, m, d, t.Hour(), 0, 0, 0, t.Location())
-}
+func BeginOfHour(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// EndOfHour return end hour time of day.
-// Play: https://go.dev/play/p/6ce3j_6cVqN
-func EndOfHour(t time.Time) time.Time {
-	y, m, d := t.Date()
-	return time.Date(y, m, d, t.Hour(), 59, 59, int(time.Second-time.Nanosecond), t.Location())
-}
+func EndOfHour(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// BeginOfDay return beginning hour time of day.
-// Play: https://go.dev/play/p/94m_UT6cWs9
-func BeginOfDay(t time.Time) time.Time {
-	y, m, d := t.Date()
-	return time.Date(y, m, d, 0, 0, 0, 0, t.Location())
-}
+func BeginOfDay(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// EndOfDay return end time of day.
-// Play: https://go.dev/play/p/eMBOvmq5Ih1
-func EndOfDay(t time.Time) time.Time {
-	y, m, d := t.Date()
-	return time.Date(y, m, d, 23, 59, 59, int(time.Second-time.Nanosecond), t.Location())
-}
+func EndOfDay(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// BeginOfWeek return beginning week, default week begin from Sunday.
-// Play: https://go.dev/play/p/DCHdcL6gnfV
 func BeginOfWeek(t time.Time, beginFrom time.Weekday) time.Time {
-	y, m, d := t.AddDate(0, 0, int(beginFrom-t.Weekday())).Date()
-	beginOfWeek := time.Date(y, m, d, 0, 0, 0, 0, t.Location())
-	if beginOfWeek.After(t) {
-		return beginOfWeek.AddDate(0, 0, -7)
-	}
-	return beginOfWeek
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// EndOfWeek return end week time, default week end with Saturday.
-// Play: https://go.dev/play/p/mGSA162YgX9
 func EndOfWeek(t time.Time, endWith time.Weekday) time.Time {
-	y, m, d := t.AddDate(0, 0, int(endWith-t.Weekday())).Date()
-	var endWithWeek = time.Date(y, m, d, 23, 59, 59, int(time.Second-time.Nanosecond), t.Location())
-	if endWithWeek.Before(t) {
-		endWithWeek = endWithWeek.AddDate(0, 0, 7)
-	}
-	return endWithWeek
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// BeginOfMonth return beginning of month.
-// Play: https://go.dev/play/p/bWXVFsmmzwL
-func BeginOfMonth(t time.Time) time.Time {
-	y, m, _ := t.Date()
-	return time.Date(y, m, 1, 0, 0, 0, 0, t.Location())
-}
+func BeginOfMonth(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// EndOfMonth return end of month.
-// Play: https://go.dev/play/p/_GWh10B3Nqi
-func EndOfMonth(t time.Time) time.Time {
-	return BeginOfMonth(t).AddDate(0, 1, 0).Add(-time.Nanosecond)
-}
+func EndOfMonth(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// BeginOfYear return the date time at the begin of year.
-// Play: https://go.dev/play/p/i326DSwLnV8
-func BeginOfYear(t time.Time) time.Time {
-	y, _, _ := t.Date()
-	return time.Date(y, time.January, 1, 0, 0, 0, 0, t.Location())
-}
+func BeginOfYear(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// EndOfYear return the date time at the end of year.
-// Play: https://go.dev/play/p/G01cKlMCvNm
-func EndOfYear(t time.Time) time.Time {
-	return BeginOfYear(t).AddDate(1, 0, 0).Add(-time.Nanosecond)
-}
+func EndOfYear(t time.Time) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-// IsLeapYear check if param year is leap year or not.
-// Play: https://go.dev/play/p/xS1eS2ejGew
-func IsLeapYear(year int) bool {
-	return year%4 == 0 && (year%100 != 0 || year%400 == 0)
-}
+func IsLeapYear(year int) bool { _ = "STUB: not implemented"; return false }
 
-// BetweenSeconds returns the number of seconds between two times.
-// Play: https://go.dev/play/p/n3YDRyfyXJu
-func BetweenSeconds(t1 time.Time, t2 time.Time) int64 {
-	index := t2.Unix() - t1.Unix()
-	return index
-}
+func BetweenSeconds(t1 time.Time, t2 time.Time) int64 { _ = "STUB: not implemented"; return 0 }
 
-// DayOfYear returns which day of the year the parameter date `t` is.
-// Play: https://go.dev/play/p/0hjqhTwFNlH
-func DayOfYear(t time.Time) int {
-	y, m, d := t.Date()
-	firstDay := time.Date(y, 1, 1, 0, 0, 0, 0, t.Location())
-	nowDate := time.Date(y, m, d, 0, 0, 0, 0, t.Location())
+func DayOfYear(t time.Time) int { _ = "STUB: not implemented"; return 0 }
 
-	return int(nowDate.Sub(firstDay).Hours() / 24)
-}
+func IsWeekend(t time.Time) bool { _ = "STUB: not implemented"; return false }
 
-// IsWeekend checks if passed time is weekend or not.
-// Play: https://go.dev/play/p/cupRM5aZOIY
-// Deprecated Use '== Weekday' instead
-func IsWeekend(t time.Time) bool {
-	return time.Saturday == t.Weekday() || time.Sunday == t.Weekday()
-}
+func NowDateOrTime(format string, timezone ...string) string { _ = "STUB: not implemented"; return "" }
 
-// NowDateOrTime return current datetime with specific format and timezone.
-// Play: https://go.dev/play/p/EZ-begEjtT0
-func NowDateOrTime(format string, timezone ...string) string {
-	tf, ok := timeFormat[strings.ToLower(format)]
-	if !ok {
-		return ""
-	}
+func Timestamp(timezone ...string) int64 { _ = "STUB: not implemented"; return 0 }
 
-	if timezone != nil && timezone[0] != "" {
-		loc, err := time.LoadLocation(timezone[0])
-		if err != nil {
-			return ""
-		}
+func TimestampMilli(timezone ...string) int64 { _ = "STUB: not implemented"; return 0 }
 
-		return time.Now().In(loc).Format(tf)
-	}
+func TimestampMicro(timezone ...string) int64 { _ = "STUB: not implemented"; return 0 }
 
-	return time.Now().Format(tf)
-}
+func TimestampNano(timezone ...string) int64 { _ = "STUB: not implemented"; return 0 }
 
-// Timestamp return current second timestamp.
-// Play: https://go.dev/play/p/iU5b7Vvjx6x
-func Timestamp(timezone ...string) int64 {
-	t := time.Now()
+func TrackFuncTime(pre time.Time) func() { _ = "STUB: not implemented"; return nil }
 
-	if timezone != nil && timezone[0] != "" {
-		loc, err := time.LoadLocation(timezone[0])
-		if err != nil {
-			return 0
-		}
+func getCallerName() string { _ = "STUB: not implemented"; return "" }
 
-		t = t.In(loc)
-	}
+func DaysBetween(start, end time.Time) int { _ = "STUB: not implemented"; return 0 }
 
-	return t.Unix()
-}
-
-// TimestampMilli return current mill second timestamp.
-// Play: https://go.dev/play/p/4gvEusOTu1T
-func TimestampMilli(timezone ...string) int64 {
-	t := time.Now()
-
-	if timezone != nil && timezone[0] != "" {
-		loc, err := time.LoadLocation(timezone[0])
-		if err != nil {
-			return 0
-		}
-		t = t.In(loc)
-	}
-
-	return int64(time.Nanosecond) * t.UnixNano() / int64(time.Millisecond)
-}
-
-// TimestampMicro return current micro second timestamp.
-// Play: https://go.dev/play/p/2maANglKHQE
-func TimestampMicro(timezone ...string) int64 {
-	t := time.Now()
-
-	if timezone != nil && timezone[0] != "" {
-		loc, err := time.LoadLocation(timezone[0])
-		if err != nil {
-			return 0
-		}
-		t = t.In(loc)
-	}
-
-	return int64(time.Nanosecond) * t.UnixNano() / int64(time.Microsecond)
-}
-
-// TimestampNano return current nano second timestamp.
-// Play: https://go.dev/play/p/A9Oq_COrcCF
-func TimestampNano(timezone ...string) int64 {
-	t := time.Now()
-
-	if timezone != nil && timezone[0] != "" {
-		loc, err := time.LoadLocation(timezone[0])
-		if err != nil {
-			return 0
-		}
-		t = t.In(loc)
-	}
-
-	return t.UnixNano()
-}
-
-// TrackFuncTime track the time of function execution.
-// call it at top of the func like `defer TrackFuncTime(time.Now())()`
-// Play: https://go.dev/play/p/QBSEdfXHPTp
-func TrackFuncTime(pre time.Time) func() {
-	callerName := getCallerName()
-	return func() {
-		elapsed := time.Since(pre)
-		fmt.Printf("Function %s execution time:\t %v", callerName, elapsed)
-	}
-}
-
-func getCallerName() string {
-	pc, _, _, ok := runtime.Caller(2)
-	if !ok {
-		return "Unknown"
-	}
-	fn := runtime.FuncForPC(pc)
-	if fn == nil {
-		return "Unknown"
-	}
-
-	fullName := fn.Name()
-	if lastDot := strings.LastIndex(fullName, "."); lastDot != -1 {
-		return fullName[lastDot+1:]
-	}
-
-	return fullName
-}
-
-// DaysBetween returns the number of days between two times.
-// Play: https://go.dev/play/p/qD6qGb3TbOy
-func DaysBetween(start, end time.Time) int {
-	duration := end.Sub(start)
-	days := int(duration.Hours() / 24)
-
-	return days
-}
-
-// GenerateDatetimesBetween returns a slice of strings between two times.
-// layout: the format of the datetime string
-// interval: the interval between two datetimes
-// Play: https://go.dev/play/p/6kHBpAxD9ZC
 func GenerateDatetimesBetween(start, end time.Time, layout string, interval string) ([]string, error) {
-	var result []string
-
-	if start.After(end) {
-		start, end = end, start
-	}
-
-	duration, err := time.ParseDuration(interval)
-	if err != nil {
-		return nil, err
-	}
-
-	for current := start; !current.After(end); current = current.Add(duration) {
-		result = append(result, current.Format(layout))
-	}
-
-	return result, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-// Min returns the earliest time among the given times.
-// Play: https://go.dev/play/p/MCIDvHNOGGb
 func Min(t1 time.Time, times ...time.Time) time.Time {
-	minTime := t1
-
-	for _, t := range times {
-		if t.Before(minTime) {
-			minTime = t
-		}
-	}
-
-	return minTime
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// Max returns the latest time among the given times.
-// Play: https://go.dev/play/p/9m6JMk1LB7-
 func Max(t1 time.Time, times ...time.Time) time.Time {
-	maxTime := t1
-
-	for _, t := range times {
-		if t.After(maxTime) {
-			maxTime = t
-		}
-	}
-
-	return maxTime
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-// MaxMin returns the latest and earliest time among the given times.
-// Play: https://go.dev/play/p/rbW51cDtM_2
 func MaxMin(t1 time.Time, times ...time.Time) (maxTime time.Time, minTime time.Time) {
-	maxTime = t1
-	minTime = t1
-
-	for _, t := range times {
-		if t.Before(minTime) {
-			minTime = t
-		}
-
-		if t.After(maxTime) {
-			maxTime = t
-		}
-	}
-
-	return maxTime, minTime
+	_ = "STUB: not implemented"
+	return *new(time.Time), *new(time.Time)
 }

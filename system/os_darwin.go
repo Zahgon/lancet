@@ -2,18 +2,6 @@
 
 package system
 
-import (
-	"os/exec"
-)
+func WithForeground() Option { _ = "STUB: not implemented"; return *new(Option) }
 
-func WithForeground() Option {
-	return func(c *exec.Cmd) {
-
-	}
-}
-
-func WithWinHide() Option {
-	return func(c *exec.Cmd) {
-
-	}
-}
+func WithWinHide() Option { _ = "STUB: not implemented"; return *new(Option) }

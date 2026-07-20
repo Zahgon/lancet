@@ -2,11 +2,8 @@ package structs
 
 import (
 	"reflect"
-
-	"github.com/duke-git/lancet/v2/pointer"
 )
 
-// Field is abstract struct field for provide several high level functions
 type Field struct {
 	Struct
 	field reflect.StructField
@@ -14,125 +11,28 @@ type Field struct {
 }
 
 func newField(v reflect.Value, f reflect.StructField, tagName string) *Field {
-	tag := f.Tag.Get(tagName)
-	field := &Field{
-		field: f,
-		tag:   newTag(tag),
-	}
-	field.rvalue = v
-	field.rtype = v.Type()
-	field.TagName = tagName
-	return field
+	_ = "STUB: not implemented"
+	return nil
 }
 
-// Tag returns the value that the key in the tag string.
-// Play: https://go.dev/play/p/DVrx5HvvUJr
-func (f *Field) Tag() *Tag {
-	return f.tag
-}
+func (f *Field) Tag() *Tag { _ = "STUB: not implemented"; return nil }
 
-// Value returns the underlying value of the field.
-// Play: https://go.dev/play/p/qufYEU2o4Oi
-func (f *Field) Value() any {
-	return f.rvalue.Interface()
-}
+func (f *Field) Value() any { _ = "STUB: not implemented"; return *new(any) }
 
-// IsEmbedded returns true if the given field is an embedded field.
-// Play: https://go.dev/play/p/wV2PrbYm3Ec
-func (f *Field) IsEmbedded() bool {
-	return len(f.field.Index) > 1
-}
+func (f *Field) IsEmbedded() bool { _ = "STUB: not implemented"; return false }
 
-// IsExported returns true if the given field is exported.
-// Play: https://go.dev/play/p/csK4AXYaNbJ
-func (f *Field) IsExported() bool {
-	return f.field.IsExported()
-}
+func (f *Field) IsExported() bool { _ = "STUB: not implemented"; return false }
 
-// IsZero returns true if the given field is zero value.
-// Play: https://go.dev/play/p/RzqpGISf87r
-func (f *Field) IsZero() bool {
-	z := reflect.Zero(f.rvalue.Type()).Interface()
-	v := f.Value()
-	return reflect.DeepEqual(z, v)
-}
+func (f *Field) IsZero() bool { _ = "STUB: not implemented"; return false }
 
-// IsNil returns true if the given field is nil value.
-func (f *Field) IsNil() bool {
-	v := f.Value()
-	if v == nil || (reflect.ValueOf(v)).Kind() == reflect.Ptr && reflect.ValueOf(v).IsNil() {
-		return true
-	}
+func (f *Field) IsNil() bool { _ = "STUB: not implemented"; return false }
 
-	return false
-}
+func (f *Field) Name() string { _ = "STUB: not implemented"; return "" }
 
-// Name returns the name of the given field
-// Play: https://go.dev/play/p/zfIGlqsatee
-func (f *Field) Name() string {
-	return f.field.Name
-}
+func (f *Field) Kind() reflect.Kind { _ = "STUB: not implemented"; return *new(reflect.Kind) }
 
-// Kind returns the field's kind
-// Play: https://go.dev/play/p/wg4NlcUNG5o
-func (f *Field) Kind() reflect.Kind {
-	return f.rvalue.Kind()
-}
+func (f *Field) IsSlice() bool { _ = "STUB: not implemented"; return false }
 
-// IsSlice check if a struct field type is slice or not
-// Play: https://go.dev/play/p/MKz4CgBIUrU
-func (f *Field) IsSlice() bool {
-	k := f.rvalue.Kind()
-	return k == reflect.Slice
-}
+func (f *Field) IsTargetType(targetType reflect.Kind) bool { _ = "STUB: not implemented"; return false }
 
-// IsTargetType check if a struct field type is target type or not
-// Play: https://go.dev/play/p/Ig75P-agN39
-func (f *Field) IsTargetType(targetType reflect.Kind) bool {
-	return f.rvalue.Kind() == targetType
-}
-
-// mapValue covert field value to map
-func (f *Field) mapValue(value any) any {
-	val := pointer.ExtractPointer(value)
-	v := reflect.ValueOf(val)
-	var ret any
-
-	switch v.Kind() {
-	case reflect.Struct:
-		s := New(val)
-		s.TagName = f.TagName
-		m, _ := s.ToMap()
-		ret = m
-	case reflect.Map:
-		mapEl := v.Type().Elem()
-		switch mapEl.Kind() {
-		case reflect.Ptr, reflect.Array, reflect.Map, reflect.Slice, reflect.Chan:
-			// iterate the map
-			m := make(map[string]any, v.Len())
-			for _, key := range v.MapKeys() {
-				m[key.String()] = f.mapValue(v.MapIndex(key).Interface())
-			}
-			ret = m
-		default:
-			ret = v.Interface()
-		}
-	case reflect.Slice, reflect.Array:
-		sEl := v.Type().Elem()
-		switch sEl.Kind() {
-		case reflect.Ptr, reflect.Array, reflect.Map, reflect.Slice, reflect.Chan:
-			slices := make([]any, v.Len())
-			for i := 0; i < v.Len(); i++ {
-				slices[i] = f.mapValue(v.Index(i).Interface())
-			}
-			ret = slices
-		default:
-			ret = v.Interface()
-		}
-	default:
-		if v.Kind().String() != "invalid" {
-			ret = v.Interface()
-		}
-	}
-	return ret
-}
+func (f *Field) mapValue(value any) any { _ = "STUB: not implemented"; return *new(any) }

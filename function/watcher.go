@@ -2,42 +2,21 @@ package function
 
 import "time"
 
-// Watcher is used for record code excution time
-// Play: https://go.dev/play/p/l2yrOpCLd1I
 type Watcher struct {
 	startTime int64
 	stopTime  int64
 	excuting  bool
 }
 
-// Start the watch timer.
-func NewWatcher() *Watcher {
-	return &Watcher{}
-}
+func NewWatcher() *Watcher { _ = "STUB: not implemented"; return nil }
 
-// Start the watch timer.
-func (w *Watcher) Start() {
-	w.startTime = time.Now().UnixNano()
-	w.excuting = true
-}
+func (w *Watcher) Start() { _ = "STUB: not implemented"; return }
 
-// Stop the watch timer.
-func (w *Watcher) Stop() {
-	w.stopTime = time.Now().UnixNano()
-	w.excuting = false
-}
+func (w *Watcher) Stop() { _ = "STUB: not implemented"; return }
 
-// GetElapsedTime get excute elapsed time.
 func (w *Watcher) GetElapsedTime() time.Duration {
-	if w.excuting {
-		return time.Duration(time.Now().UnixNano() - w.startTime)
-	}
-	return time.Duration(w.stopTime - w.startTime)
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
-// Reset the watch timer.
-func (w *Watcher) Reset() {
-	w.startTime = 0
-	w.stopTime = 0
-	w.excuting = false
-}
+func (w *Watcher) Reset() { _ = "STUB: not implemented"; return }
